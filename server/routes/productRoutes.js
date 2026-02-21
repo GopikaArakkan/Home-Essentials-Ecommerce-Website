@@ -1,8 +1,8 @@
 import express from "express";
 import Product from "../models/Product.js";
 import mongoose from "mongoose";
-import adminOnly from "../middleware/Admin.js";
-import { protect } from "../middleware/AuthMiddleware.js";
+import adminOnly from "../middleware/admin.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 
 
