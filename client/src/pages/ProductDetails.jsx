@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+
+import api from "../api";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -59,7 +60,7 @@ const isAdmin = user?.isAdmin;
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`/api/products/${id}`);
+        const res = await api.get(`/api/products/${id}`);
         setProduct(res.data);
         setReviews(res.data.reviews || []);
            // ✅ THIS LINE IS REQUIRED FOR QUESTIONS TAB
@@ -141,7 +142,7 @@ const ratingBreakdown = (reviewsList) => {
     setShowReviewForm(false);
 
     // 🔥 reload product so rating + reviews update
-    const res = await axios.get(`/api/products/${id}`);
+    const res = await api.get(`/api/products/${id}`);
     setProduct(res.data);
     setReviews(res.data.reviews || []);
   } catch (err) {
@@ -161,7 +162,7 @@ const deleteReviewHandler = async (reviewId) => {
 
 
     // reload product
-    const res = await axios.get(`/api/products/${id}`);
+    const res = await api.get(`/api/products/${id}`);
     setProduct(res.data);
     setReviews(res.data.reviews || []);
   } catch (err) {
@@ -185,7 +186,7 @@ const replyToReview = async (reviewId, reply) => {
       }
     );
 
-    const res = await axios.get(`/api/products/${id}`);
+    const res = await api.get(`/api/products/${id}`);
     setReviews(res.data.reviews || []);
   } catch {
     alert("Failed to update reply");
@@ -209,7 +210,7 @@ const deleteQuestionHandler = async (questionId) => {
     );
 
     // 🔄 reload product after delete
-    const res = await axios.get(`/api/products/${id}`);
+    const res = await api.get(`/api/products/${id}`);
     setProduct(res.data);
     setQuestions(res.data.questions || []);
   } catch (err) {
@@ -227,7 +228,7 @@ const submitQuestionHandler = async () => {
       question: questionText,
     });
 
-    const res = await axios.get(`/api/products/${id}`);
+    const res = await api.get(`/api/products/${id}`);
     setQuestions(res.data.questions || []);
 
     setQuestionText("");
@@ -249,7 +250,7 @@ const replyToQuestion = async (questionId, answer) => {
 );
 
 
-    const res = await axios.get(`/api/products/${id}`);
+    const res = await api.get(`/api/products/${id}`);
     setQuestions(res.data.questions || []);
   } catch {
     alert("Failed to reply to question");
