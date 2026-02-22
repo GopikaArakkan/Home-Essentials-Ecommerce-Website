@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   // 🔐 LOGIN (REAL BACKEND LOGIN)
   const login = async (email, password) => {
-     try {
+    try {
       const { data } = await api.post(
         "/api/users/login",
         { email, password }

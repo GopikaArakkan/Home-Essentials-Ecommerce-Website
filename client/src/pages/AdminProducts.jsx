@@ -52,7 +52,7 @@ export default function AdminProducts() {
 
   // DELETE PRODUCT
   const deleteProduct = async (id) => {
-    await api.delete(`/api/products/${id}`,
+    await api.delete(`/api/products/${id}`,   
       {
         headers: {
           Authorization: `Bearer ${userInfo.token}`,
