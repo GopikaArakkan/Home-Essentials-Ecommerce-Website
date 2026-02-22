@@ -33,7 +33,18 @@ export default function ProductDetails() {
   const [infoTab, setInfoTab] = useState("description");
  const { user } = useAuth();
 const isAdmin = user?.isAdmin;
+const resolveImage = (img) => {
+  if (!img) return "/placeholder.png";
 
+  // frontend public images
+  if (img.startsWith("/images")) return img;
+
+  // backend uploads (future-proof, but optional)
+  if (img.startsWith("/uploads")) return `${API_BASE}${img}`;
+
+  // fallback for old data
+  return img;
+};
 
 
   const DEFAULT_REVIEWS = [
@@ -287,26 +298,28 @@ const replyToQuestion = async (questionId, answer) => {
           {/* LEFT IMAGES */}
           <div>
           <img
-  src={mainImage ? `${API_BASE}${mainImage}` : "/placeholder.png"}
+  src={resolveImage(mainImage)}
   alt={product.name}
   className="w-full h-[420px] object-cover shadow-lg shadow-gray-700 rounded-2xl transition-all duration-300 ease-out
-  hover:scale-90 hover:shadow-l grounded-3xl" />
+  hover:scale-90 hover:shadow-l grounded-3xl"
+/>
             <div className="flex gap-4 mt-4">
               {images.map((img, i) => (
-                <img  key={i}
-  src={`${API_BASE}${img}`}
+                <img
+  key={i}
+  src={resolveImage(img)}
   onClick={() => setMainImage(img)}
   className={` 
-  w-20 h-20 
-  rounded-xl 
-  cursor-pointer 
-  border 
-  object-cover
-  transition-all duration-300 ease-out
-  hover:scale-105 hover:shadow-lg
-  ${mainImage === img ? "ring-2 ring-orange-400 scale-105" : "border-gray-200"}
-`}
-                />
+    w-20 h-20 
+    rounded-xl 
+    cursor-pointer 
+    border 
+    object-cover
+    transition-all duration-300 ease-out
+    hover:scale-105 hover:shadow-lg
+    ${mainImage === img ? "ring-2 ring-orange-400 scale-105" : "border-gray-200"}
+  `}
+/>
               ))}
             </div>
           </div>
@@ -378,7 +391,7 @@ const replyToQuestion = async (questionId, answer) => {
     onClick={() => {
       addToCart({
         ...product,
-       image: `${API_BASE}${product.images?.[0]}`,
+       image: resolveImage(product.images?.[0]),
         price: discountedPrice,
         originalPrice: product.price,
         discountPercent: product.discountPercent,
@@ -396,7 +409,7 @@ const replyToQuestion = async (questionId, answer) => {
     onClick={() => {
       addToCart({
         ...product,
-       image: `${API_BASE}${product.images?.[0]}`,
+      image: resolveImage(product.images?.[0]),
         price: discountedPrice,
         originalPrice: product.price,
         discountPercent: product.discountPercent,
