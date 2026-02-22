@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import api from "../api";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -130,12 +131,19 @@ const ratingBreakdown = (reviewsList) => {
 
   const submitReviewHandler = async () => {
   try {
-   await axios.post(`/api/products/${id}/reviews`, {
-  name: user.name,   // ✅
-  rating: reviewRating,
-  comment: reviewText,
-});
-
+  await api.post(
+  `/api/products/${id}/reviews`,
+  {
+    name: user.name,
+    rating: reviewRating,
+    comment: reviewText,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  }
+);
 
     setReviewText("");
     setReviewRating(5);
@@ -155,9 +163,13 @@ const deleteReviewHandler = async (reviewId) => {
   if (!window.confirm("Delete this review?")) return;
 
   try {
-   await axios.delete(
+ await api.delete(
   `/api/products/${id}/reviews/${reviewId}`,
-  { headers: { "x-admin": true } }
+  {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  }
 );
 
 
@@ -175,17 +187,15 @@ const replyToReview = async (reviewId, reply) => {
   if (!reply.trim()) return;
 
   try {
-    await axios.put(
-      `/api/products/${id}/reviews/${reviewId}/reply`,
-      {
-        reply,
-        adminName: user.name,
-      },
-      {
-        headers: { "x-admin": true },
-      }
-    );
-
+   await api.put(
+  `/api/products/${id}/reviews/${reviewId}/reply`,
+  { reply },
+  {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  }
+);
     const res = await api.get(`/api/products/${id}`);
     setReviews(res.data.reviews || []);
   } catch {
@@ -200,11 +210,11 @@ const deleteQuestionHandler = async (questionId) => {
   if (!window.confirm("Delete this question?")) return;
 
   try {
-    await axios.delete(
+    await api.delete(
       `/api/products/${id}/questions/${questionId}`,
       {
         headers: {
-          "x-admin": true, // ✅ tells backend this is admin
+          Authorization: `Bearer ${user.token}`,// ✅ tells backend this is admin
         },
       }
     );
@@ -223,10 +233,16 @@ const deleteQuestionHandler = async (questionId) => {
 
 const submitQuestionHandler = async () => {
   try {
-    await axios.post(`/api/products/${id}/questions`, {
+    await api.post(`/api/products/${id}/questions`, {
       user: user?.name || "Anonymous",
       question: questionText,
-    });
+    },
+  {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    );
 
     const res = await api.get(`/api/products/${id}`);
     setQuestions(res.data.questions || []);
@@ -243,10 +259,13 @@ const replyToQuestion = async (questionId, answer) => {
   if (!answer.trim()) return;
 
   try {
-    await axios.put(
+    await api.put(
   `/api/products/${id}/questions/${questionId}/answer`,
   { answer, adminName: user.name },
-  { headers: { "x-admin": true } }
+  { headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
 );
 
 
@@ -267,15 +286,17 @@ const replyToQuestion = async (questionId, answer) => {
 
           {/* LEFT IMAGES */}
           <div>
-            <img src={mainImage} alt={product.name} className="w-full h-[420px] object-cover shadow-lg shadow-gray-700 rounded-2xl transition-all duration-300 ease-out
+          <img
+  src={mainImage ? `${API_BASE}${mainImage}` : "/placeholder.png"}
+  alt={product.name}
+  className="w-full h-[420px] object-cover shadow-lg shadow-gray-700 rounded-2xl transition-all duration-300 ease-out
   hover:scale-90 hover:shadow-l grounded-3xl" />
             <div className="flex gap-4 mt-4">
               {images.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  onClick={() => setMainImage(img)}
-                className={` 
+                <img  key={i}
+  src={`${API_BASE}${img}`}
+  onClick={() => setMainImage(img)}
+  className={` 
   w-20 h-20 
   rounded-xl 
   cursor-pointer 
@@ -357,7 +378,7 @@ const replyToQuestion = async (questionId, answer) => {
     onClick={() => {
       addToCart({
         ...product,
-        image: product.images?.[0],
+       image: `${API_BASE}${product.images?.[0]}`,
         price: discountedPrice,
         originalPrice: product.price,
         discountPercent: product.discountPercent,
@@ -375,7 +396,7 @@ const replyToQuestion = async (questionId, answer) => {
     onClick={() => {
       addToCart({
         ...product,
-        image: product.images?.[0],
+       image: `${API_BASE}${product.images?.[0]}`,
         price: discountedPrice,
         originalPrice: product.price,
         discountPercent: product.discountPercent,

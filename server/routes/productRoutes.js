@@ -10,7 +10,7 @@ const router = express.Router();
 
 
 // DELETE a review (ADMIN only)
-router.delete("/:id/reviews/:reviewId", adminOnly, async (req, res) => {
+router.delete("/:id/reviews/:reviewId", protect, adminOnly, async (req, res) => {
 
   try {
     const product = await Product.findById(req.params.id);
@@ -42,7 +42,7 @@ router.delete("/:id/reviews/:reviewId", adminOnly, async (req, res) => {
 
 
 // ADMIN add/edit reply to review
-router.put("/:id/reviews/:reviewId/reply", async (req, res) => {
+router.put("/:id/reviews/:reviewId/reply", protect, adminOnly, async (req, res) => {
   try {
     const { reply, adminName } = req.body;
 
@@ -74,7 +74,7 @@ router.put("/:id/reviews/:reviewId/reply", async (req, res) => {
 
 
 // DELETE a question (ADMIN only)
-router.delete("/:id/questions/:questionId", adminOnly, async (req, res) => {
+router.delete("/:id/questions/:questionId", protect, adminOnly, async (req, res) => {
 
   try {
     const product = await Product.findById(req.params.id);
@@ -98,7 +98,7 @@ router.delete("/:id/questions/:questionId", adminOnly, async (req, res) => {
 
 
 // ADMIN add/edit answer to question
-router.put("/:id/questions/:questionId/answer", async (req, res) => {
+router.put("/:id/questions/:questionId/answer", protect, adminOnly, async (req, res) => {
   try {
     const { answer, adminName } = req.body;
 
@@ -131,7 +131,7 @@ router.put("/:id/questions/:questionId/answer", async (req, res) => {
 
 
 // POST product review
-router.post("/:id/reviews", async (req, res) => {
+router.post("/:id/reviews", protect, async (req, res) => {
   const { rating, comment } = req.body
 
   try {
@@ -183,7 +183,7 @@ router.get("/", async (req, res) => {
 
 
 // POST a question (USER)
-router.post("/:id/questions", async (req, res) => {
+router.post("/:id/questions", protect, async (req, res) => {
   try {
     const { question, user } = req.body;
 
@@ -193,7 +193,7 @@ router.post("/:id/questions", async (req, res) => {
     }
 
     product.questions.push({
-      user,
+        user: req.user.name,
       question,
     });
 
@@ -280,7 +280,7 @@ router.delete("/:id", protect, adminOnly, async (req, res) => {
 // ===============================
 // ADMIN: UPDATE PRODUCT
 // ===============================
-router.put("/:id", adminOnly, async (req, res) => {
+router.put("/:id", protect, adminOnly, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
@@ -303,25 +303,6 @@ router.put("/:id", adminOnly, async (req, res) => {
     res.status(500).json({ message: "Product update failed" });
   }
 });
-
-// ===============================
-// ADMIN: DELETE PRODUCT
-// ===============================
-router.delete("/:id", adminOnly, async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    await product.deleteOne();
-    res.json({ message: "Product deleted" });
-  } catch (error) {
-    res.status(500).json({ message: "Product delete failed" });
-  }
-});
-
 
 
 // ✅ THIS LINE IS MANDATORY

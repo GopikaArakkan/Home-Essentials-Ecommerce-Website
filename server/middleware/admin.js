@@ -1,9 +1,7 @@
 const adminOnly = (req, res, next) => {
-  // temporary admin check (frontend controlled)
-  if (!req.headers["x-admin"]) {
+  if (!req.user || !req.user.isAdmin) {
     return res.status(403).json({ message: "Admin access only" });
   }
-
   next();
 };
 
