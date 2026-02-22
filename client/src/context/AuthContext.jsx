@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 const AuthContext = createContext();
 
@@ -11,8 +11,8 @@ export const AuthProvider = ({ children }) => {
   // 🔐 LOGIN (REAL BACKEND LOGIN)
   const login = async (email, password) => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/users/login",
+      const { data } = await api.post(
+        "/api/users/login",
         { email, password }
       );
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api"; 
+// or "../../api" depending on file location
 
 export default function OrderScreen() {
   const { id } = useParams();
@@ -22,8 +23,8 @@ export default function OrderScreen() {
       try {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-        const { data } = await axios.get(
-          `http://localhost:5000/api/orders/${id}`,
+        const { data } = await api.get(
+          `api/orders/${id}`,
           {
             headers: {
               Authorization: `Bearer ${userInfo.token}`,

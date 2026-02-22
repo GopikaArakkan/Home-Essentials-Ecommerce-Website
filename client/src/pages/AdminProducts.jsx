@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -20,14 +20,13 @@ export default function AdminProducts() {
   }, []);
 
   const fetchProducts = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/products");
+    const { data } = await api.get("/api/products");
     setProducts(data);
   };
 
   // CREATE PRODUCT
   const createProduct = async () => {
-    await axios.post(
-      "http://localhost:5000/api/products",
+    await api.post("/api/products",
       {
         ...form,
         images: form.images.split(","),
@@ -53,8 +52,7 @@ export default function AdminProducts() {
 
   // DELETE PRODUCT
   const deleteProduct = async (id) => {
-    await axios.delete(
-      `http://localhost:5000/api/products/${id}`,
+    await api.delete(`/api/products/${id}`,
       {
         headers: {
           Authorization: `Bearer ${userInfo.token}`,

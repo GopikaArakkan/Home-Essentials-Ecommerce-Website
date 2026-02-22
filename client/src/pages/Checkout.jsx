@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
- import axios from "axios";
+import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -165,8 +165,8 @@ console.log("TOKEN:", userInfo?.token);
 
   console.log("ORDER BEING SENT:", order);
     // ✅ 3. Send order to backend WITH TOKEN
-    const { data } = await axios.post(
-      "http://localhost:5000/api/orders",
+    const { data } = await api.post(
+  "/api/orders",
       order,
       {
         headers: {

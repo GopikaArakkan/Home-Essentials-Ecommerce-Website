@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
+import api from "../api"; 
+// or "../../api" depending on file location
 
 
 export default function Register() {
@@ -37,7 +38,7 @@ const handleRegister = async () => {
   if (isDisabled) return;
 
   try {
-    await axios.post("http://localhost:5000/api/users/register", {
+    await api.post("api/users/register", {
       name: `${firstName} ${lastName}`,
       email,
       password,

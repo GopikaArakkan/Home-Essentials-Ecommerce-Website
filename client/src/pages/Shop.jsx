@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api"; 
+// or "../../api" depending on file location
  import { useParams, Link, useLocation } from "react-router-dom";
 import ProductCarousel from "../components/ProductCarousel";
 import ProductCard from "../components/ProductCard";
@@ -330,7 +331,7 @@ const handleWardrobeFilterChange = (e) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await api.get("api/products");
       setProducts(res.data);
       setLoading(false);
     };

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api"; 
+// or "../../api" depending on file location
 import { Link } from "react-router-dom";
 
 export default function MyOrders() {
@@ -21,8 +22,8 @@ export default function MyOrders() {
       try {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-        const { data } = await axios.get(
-          "http://localhost:5000/api/orders/myorders",
+        const { data } = await api.get(
+          "api/orders/myorders",
           {
             headers: {
               Authorization: `Bearer ${userInfo.token}`,

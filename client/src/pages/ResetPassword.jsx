@@ -1,4 +1,5 @@
-import axios from "axios";
+import api from "../api"; 
+// or "../../api" depending on file location
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -29,8 +30,8 @@ const handleReset = async () => {
   }
 
   try {
-    const { data } = await axios.post(
-      "http://localhost:5000/api/users/reset-password",
+    const { data } = await api.post(
+      "api/users/reset-password",
       { email, password }
     );
 
