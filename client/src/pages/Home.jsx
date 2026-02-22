@@ -1,4 +1,4 @@
-import axios from "axios"
+import api from "../api"
 import { useEffect, useState } from "react"
 
 import HeroSection from "../components/HeroSection"
@@ -20,10 +20,8 @@ export default function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-      //  const res = await axios.get("http://127.0.0.1:5000/api/products");
-      const res = await axios.get(
-  `${import.meta.env.VITE_API_URL}/api/products`
-);
+      
+     const res = await api.get("/api/products");
 
 
 
