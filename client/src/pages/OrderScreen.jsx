@@ -24,7 +24,7 @@ export default function OrderScreen() {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
         const { data } = await api.get(
-          `api/orders/${id}`,
+          `/api/orders/${id}`,
           {
             headers: {
               Authorization: `Bearer ${userInfo.token}`,

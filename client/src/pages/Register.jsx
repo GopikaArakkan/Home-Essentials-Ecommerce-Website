@@ -38,7 +38,7 @@ const handleRegister = async () => {
   if (isDisabled) return;
 
   try {
-    await api.post("api/users/register", {
+    await api.post("/api/users/register", {
       name: `${firstName} ${lastName}`,
       email,
       password,

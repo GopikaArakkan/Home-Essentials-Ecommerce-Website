@@ -23,7 +23,7 @@ export default function MyOrders() {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
         const { data } = await api.get(
-          "api/orders/myorders",
+          "/api/orders/myorders",
           {
             headers: {
               Authorization: `Bearer ${userInfo.token}`,

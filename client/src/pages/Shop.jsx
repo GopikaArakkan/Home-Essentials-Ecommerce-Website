@@ -331,7 +331,7 @@ const handleWardrobeFilterChange = (e) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await api.get("api/products");
+      const res = await api.get("/api/products");
       setProducts(res.data);
       setLoading(false);
     };

@@ -31,7 +31,7 @@ const handleReset = async () => {
 
   try {
     const { data } = await api.post(
-      "api/users/reset-password",
+      "/api/users/reset-password",
       { email, password }
     );
 

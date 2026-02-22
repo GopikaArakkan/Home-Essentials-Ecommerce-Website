@@ -15,7 +15,7 @@ export default function ForgotPassword() {
 
     try {
       const { data } = await api.post(
-        "api/users/forgot-password",
+        "/api/users/forgot-password",
         { email }
       );
 
